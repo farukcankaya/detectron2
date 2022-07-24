@@ -36,6 +36,7 @@ from detectron2.evaluation import (
     SemSegEvaluator,
     verify_results,
 )
+from detectron2.evaluation.kitti360_evaluation import Kitti360InstanceEvaluator
 from detectron2.modeling import GeneralizedRCNNWithTTA
 
 
@@ -62,6 +63,8 @@ def build_evaluator(cfg, dataset_name, output_folder=None):
         evaluator_list.append(COCOEvaluator(dataset_name, output_dir=output_folder))
     if evaluator_type == "coco_panoptic_seg":
         evaluator_list.append(COCOPanopticEvaluator(dataset_name, output_folder))
+    if evaluator_type == "kitti360_instance":
+        return Kitti360InstanceEvaluator(dataset_name)
     if evaluator_type == "cityscapes_instance":
         return CityscapesInstanceEvaluator(dataset_name)
     if evaluator_type == "cityscapes_sem_seg":

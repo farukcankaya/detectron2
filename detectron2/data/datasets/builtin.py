@@ -23,6 +23,7 @@ from detectron2.data import DatasetCatalog, MetadataCatalog
 
 from .builtin_meta import ADE20K_SEM_SEG_CATEGORIES, _get_builtin_metadata
 from .cityscapes import load_cityscapes_instances, load_cityscapes_semantic
+from .kitti360 import load_kitti360_instances
 from .cityscapes_panoptic import register_all_cityscapes_panoptic
 from .coco import load_sem_seg, register_coco_instances
 from .coco_panoptic import register_coco_panoptic, register_coco_panoptic_separated
@@ -210,6 +211,29 @@ def register_all_cityscapes(root):
             **meta,
         )
 
+# ==== Predefined splits for raw kitti360 images ===========
+_RAW_KITTI360_SPLITS = {
+    "kitti360_{task}_train": 'data_2d_semantics/train/2013_05_28_drive_train_frames.txt',
+    "kitti360_{task}_val": 'data_2d_semantics/train/2013_05_28_drive_val_frames.txt',
+    #"kitti360_{task}_test": ("KITTI-360/data_2d_test/test/", "cityscapes/gtFine/test/"),
+}
+
+
+def register_kitti360_semantic_2d(root):
+    root = os.path.join(root, 'KITTI-360')
+
+    for key, gt_file in _RAW_KITTI360_SPLITS.items():
+        meta = _get_builtin_metadata("kitti360")
+
+        inst_key = key.format(task="instance_seg")
+        DatasetCatalog.register(
+            inst_key,
+            lambda x=root, y=gt_file: load_kitti360_instances(x, y),
+        )
+        MetadataCatalog.get(inst_key).set(
+            root=root, gt_file=gt_file, evaluator_type="kitti360_instance", **meta
+        )
+
 
 # ==== Predefined splits for PASCAL VOC ===========
 def register_all_pascal_voc(root):
@@ -255,5 +279,6 @@ if __name__.endswith(".builtin"):
     register_all_lvis(_root)
     register_all_cityscapes(_root)
     register_all_cityscapes_panoptic(_root)
+    register_kitti360_semantic_2d(_root)
     register_all_pascal_voc(_root)
     register_all_ade20k(_root)
