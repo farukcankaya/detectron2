@@ -20,13 +20,12 @@ To add new dataset, refer to the tutorial "docs/DATASETS.md".
 import os
 
 from detectron2.data import DatasetCatalog, MetadataCatalog
-
 from .builtin_meta import ADE20K_SEM_SEG_CATEGORIES, _get_builtin_metadata
 from .cityscapes import load_cityscapes_instances, load_cityscapes_semantic
-from .kitti360 import load_kitti360_instances
 from .cityscapes_panoptic import register_all_cityscapes_panoptic
 from .coco import load_sem_seg, register_coco_instances
 from .coco_panoptic import register_coco_panoptic, register_coco_panoptic_separated
+from .kitti360 import load_kitti360_instances
 from .lvis import get_lvis_instances_meta, register_lvis_instances
 from .pascal_voc import register_pascal_voc
 
@@ -73,7 +72,6 @@ _PREDEFINED_SPLITS_COCO["coco_person"] = {
     ),
 }
 
-
 _PREDEFINED_SPLITS_COCO_PANOPTIC = {
     "coco_2017_train_panoptic": (
         # This is the original panoptic annotation directory
@@ -111,8 +109,8 @@ def register_all_coco(root):
             )
 
     for (
-        prefix,
-        (panoptic_root, panoptic_json, semantic_root),
+            prefix,
+            (panoptic_root, panoptic_json, semantic_root),
     ) in _PREDEFINED_SPLITS_COCO_PANOPTIC.items():
         prefix_instances = prefix[: -len("_panoptic")]
         instances_meta = MetadataCatalog.get(prefix_instances)
@@ -211,16 +209,20 @@ def register_all_cityscapes(root):
             **meta,
         )
 
+
 # ==== Predefined splits for raw kitti360 images ===========
 _RAW_KITTI360_SPLITS = {
     "kitti360_{task}_train": 'data_2d_semantics/train/2013_05_28_drive_train_frames.txt',
     "kitti360_{task}_val": 'data_2d_semantics/train/2013_05_28_drive_val_frames.txt',
-    #"kitti360_{task}_test": ("KITTI-360/data_2d_test/test/", "cityscapes/gtFine/test/"),
+    # "kitti360_{task}_test": ("KITTI-360/data_2d_test/test/", "cityscapes/gtFine/test/"),
 }
 
 
 def register_kitti360_semantic_2d(root):
-    root = os.path.join(root, 'KITTI-360')
+    if 'KITTI360_DATASET' in os.environ:
+        root = os.environ['KITTI360_DATASET']
+    else:
+        root = os.path.join(root, 'KITTI-360')
 
     for key, gt_file in _RAW_KITTI360_SPLITS.items():
         meta = _get_builtin_metadata("kitti360")

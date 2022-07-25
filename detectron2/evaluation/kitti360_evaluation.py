@@ -100,7 +100,8 @@ class Kitti360InstanceEvaluator(Kitti360Evaluator):
         self._logger.info("Evaluating results under {} ...".format(self._temp_dir))
 
         # set some global states in kitti360 evaluation API, before evaluating
-        kitti360_eval.args.kitti360Path = self._metadata.root
+        kitti360_eval.args.kitti360Path = os.environ[
+            'KITTI360_DATASET'] if 'KITTI360_DATASET' in os.environ else self._metadata.root
         kitti360_eval.args.groundTruthListFile = os.path.join(self._metadata.root, self._metadata.gt_file)
         kitti360_eval.args.predictionPath = os.path.abspath(self._temp_dir)
         kitti360_eval.args.predictionWalk = None
