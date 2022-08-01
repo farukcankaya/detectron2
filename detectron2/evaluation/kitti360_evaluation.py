@@ -1,8 +1,10 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import logging
 import os
+import sys
 import tempfile
 from collections import OrderedDict
+from io import StringIO
 
 import torch
 from PIL import Image
@@ -141,9 +143,22 @@ class Kitti360InstanceEvaluator(Kitti360Evaluator):
             predictionImgList.append(kitti360_eval.getPrediction(kitti360_eval.args, gt))
         results = kitti360_eval.evaluateImgLists(
             predictionImgList, groundTruthImgList, kitti360_eval.args
-        )["averages"]
+        )['averages']
+
+        # Log printed results
+        old_stdout = sys.stdout
+        result = StringIO()
+        sys.stdout = result
+        kitti360_eval.printResults(results, kitti360_eval.args)
+        self._logger.info(result.getvalue())
+        sys.stdout = old_stdout
 
         ret = OrderedDict()
-        ret["segm"] = {"AP": results["allAp"] * 100, "AP50": results["allAp50%"] * 100}
+        ret["segm"] = {
+            "allAP": results["allAp"] * 100,
+            "allAP50": results["allAp50%"] * 100,
+            "carAP": results["classes"]["car"]["ap"] * 100,
+            "carAP50": results["classes"]["car"]["ap50%"] * 100
+        }
         self._working_dir.cleanup()
         return ret
