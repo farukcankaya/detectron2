@@ -35,7 +35,7 @@ def _get_kitti360_files(kitti_root, image_gt_list_file):
             image_file = img_gt
             instance_file = None
             confidence_file = None
-        files.append(tuple(os.path.join(kitti_root, f) for f in (image_file, instance_file, instance_file, confidence_file)))
+        files.append(tuple(os.path.join(kitti_root, f) for f in (image_file, instance_file, confidence_file)))
 
     assert len(files), "No images found in {}".format(image_dir)
 
@@ -74,7 +74,7 @@ def load_kitti360_instances(root, image_gt_list_file, to_polygons=True):
 def _kitti360_files_to_dict(files, to_polygons):
     from kitti360scripts.helpers.labels import id2label, name2label
 
-    image_file, instance_file, instance_file, confidence_file = files
+    image_file, instance_file, confidence_file = files
 
     annos = []
     # See also the official annotation parsing scripts at
