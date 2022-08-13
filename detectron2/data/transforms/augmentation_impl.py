@@ -20,7 +20,7 @@ from fvcore.transforms.transform import (
 from PIL import Image
 
 from .augmentation import Augmentation, _transform_to_aug
-from .transform import ExtentTransform, ResizeTransform, RotationTransform
+from .transform import ExtentTransform, ResizeTransform, RotationTransform, AlbumentationsTransform
 
 __all__ = [
     "FixedSizeCrop",
@@ -37,6 +37,7 @@ __all__ = [
     "ResizeScale",
     "ResizeShortestEdge",
     "RandomCrop_CategoryAreaConstraint",
+    "Albumentations",
 ]
 
 
@@ -612,3 +613,17 @@ class RandomLighting(Augmentation):
         return BlendTransform(
             src_image=self.eigen_vecs.dot(weights * self.eigen_vals), src_weight=1.0, dst_weight=1.0
         )
+
+
+class Albumentations(Augmentation):
+    def __init__(self, augmentor):
+        """
+        Args:
+            augmentor (albumentations.Compose):
+        """
+        super(Albumentations, self).__init__()
+        self._aug = augmentor
+
+    def get_transform(self, image, masks, bboxes):
+        return AlbumentationsTransform(self._aug)
+

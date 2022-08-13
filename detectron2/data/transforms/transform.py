@@ -30,6 +30,7 @@ __all__ = [
     "RotationTransform",
     "ColorTransform",
     "PILColorTransform",
+    "AlbumentationsTransform",
 ]
 
 
@@ -343,6 +344,41 @@ def Resize_rotated_box(transform, rotated_boxes):
 
     return rotated_boxes
 
+
+import albumentations as A
+class AlbumentationsTransform(Transform):
+    def __init__(self, augmentor):
+        """
+        Args:
+            augmentor (albumentations.Compose):
+
+        Example Usage:
+        1. Use extended AugInput to call this Albumentation transform
+            with additional arguments: image, masks, bboxes
+        2. Call ´apply´ transform in extended AugInput
+        """
+        if not isinstance(augmentor, A.Compose):
+            raise ValueError("augmentor parameter should be Compose")
+        super().__init__()
+        self._set_attributes(locals())
+
+    def apply(self, image, masks, bboxes, **params):
+        # keyword arguments should be used: https://albumentations.ai/docs/examples/example_bboxes/#Define-an-augmentation-pipeline
+        # bboxes = [[5.66, 138.95, 147.09, 164.88], [366.7, 80.84, 132.8, 181.84]]
+        return self.augmentor(image=image, masks=masks, bboxes=bboxes, **params)
+
+    def apply_image(self, img):
+        raise NotImplementedError()
+
+    def apply_coords(self, coords):
+        return coords
+        #raise NotImplementedError()
+
+    def inverse(self):
+        raise NotImplementedError()
+
+    def apply_segmentation(self, segmentation):
+        raise NotImplementedError()
 
 HFlipTransform.register_type("rotated_box", HFlip_rotated_box)
 ResizeTransform.register_type("rotated_box", Resize_rotated_box)
