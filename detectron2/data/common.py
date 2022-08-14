@@ -87,7 +87,24 @@ class MapDataset(data.Dataset):
         cur_idx = int(idx)
 
         while True:
-            data = self._map_func(self._dataset[cur_idx])
+            # TODO: existence of CopyPaste aug can be checked with
+            ## self._map_func._obj.augmentations.augs[0]._aug.transforms
+            ## type(self._map_func._obj.augmentations.augs[0]._aug.transforms[0]).__name__
+            if type(self._map_func._obj).__name__ == 'OADatasetMapper':
+                augs = [aug for aug in self._map_func._obj.augmentations.augs if type(aug).__name__ == 'Albumentations']
+                albumentation_augs = set()
+                for aug in augs:
+                    albumentation_augs = albumentation_augs.union(set([type(i).__name__ for i in aug._aug.transforms]))
+
+                paste_data_dict = None
+                paste_data_idx = None
+                if 'CopyPaste' in albumentation_augs or True:
+                    paste_data_idx = random.randint(0, self.__len__() - 1)
+                    paste_data_dict = self._dataset[paste_data_idx]
+
+                data = self._map_func(self._dataset[cur_idx], paste_data_dict=paste_data_dict, paste_data_idx=paste_data_idx)
+            else:
+                data = self._map_func(self._dataset[cur_idx])
             if data is not None:
                 self._fallback_candidates.add(cur_idx)
                 return data

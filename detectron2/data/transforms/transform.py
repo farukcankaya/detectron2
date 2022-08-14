@@ -365,6 +365,9 @@ class AlbumentationsTransform(Transform):
     def apply(self, image, masks, bboxes, **params):
         # keyword arguments should be used: https://albumentations.ai/docs/examples/example_bboxes/#Define-an-augmentation-pipeline
         # bboxes = [[5.66, 138.95, 147.09, 164.88], [366.7, 80.84, 132.8, 181.84]]
+        # TODO: can we separate parameter and call separately from apply_image, apply_coords, etc. instead of 'apply'?
+        ## apply_image => self.augmentor(image=image, **params)
+        ## apply_bbox => self.augmentor(bboxes=bboxes, **params)
         return self.augmentor(image=image, masks=masks, bboxes=bboxes, **params)
 
     def apply_image(self, img):
