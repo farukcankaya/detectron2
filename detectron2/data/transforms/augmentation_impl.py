@@ -627,3 +627,10 @@ class Albumentations(Augmentation):
     def get_transform(self, image, masks, bboxes):
         return AlbumentationsTransform(self._aug)
 
+    def __repr__(self):
+        try:
+            return str(self._aug)
+        except AssertionError:
+            return super().__repr__()
+
+    __str__ = __repr__

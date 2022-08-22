@@ -271,23 +271,23 @@ class SimpleTrainer(TrainerBase):
         """
         If you want to do something with the losses, you can wrap the model.
         """
-        # TODO
-        from PIL import Image
-        import cv2
-        def visualize_bbox(img, bbox, color=(255, 0, 0), thickness=2):
-            #print(f"bbox({bbox}) img.size:{img.shape} unique: {np.unique(img)}")
-            img = np.ascontiguousarray(img, dtype=np.uint8) # otherwise it throws exeption https://stackoverflow.com/a/50128836
-            #print(f"bbox({bbox}) img.size:{img.shape} unique: {np.unique(img)}")
-            x_min, y_min, x_max, y_max = bbox
-            cv2.rectangle(img, (int(x_min), int(y_min)), (int(x_max), int(y_max)), color=color, thickness=thickness)
-            return img
-
-        augimage = data[2]['image'].permute(1, 2, 0).numpy()
-        ii, ext = data[2]["image_id"].split('.')
-        Image.fromarray(augimage).save(f'aug_test/{ii}_{self.iter}_img.{ext}')
-        for i in range(len(data[2]['instances'])):
-            augimage = visualize_bbox(augimage, list(data[2]['instances'].gt_boxes[i].tensor.numpy()[0]))
-        Image.fromarray(augimage).save(f'aug_test/{ii}_{self.iter}_augimg.{ext}')
+        # # TODO
+        # from PIL import Image
+        # import cv2
+        # def visualize_bbox(img, bbox, color=(255, 0, 0), thickness=2):
+        #     #print(f"bbox({bbox}) img.size:{img.shape} unique: {np.unique(img)}")
+        #     img = np.ascontiguousarray(img, dtype=np.uint8) # otherwise it throws exeption https://stackoverflow.com/a/50128836
+        #     #print(f"bbox({bbox}) img.size:{img.shape} unique: {np.unique(img)}")
+        #     x_min, y_min, x_max, y_max = bbox
+        #     cv2.rectangle(img, (int(x_min), int(y_min)), (int(x_max), int(y_max)), color=color, thickness=thickness)
+        #     return img
+        #
+        # augimage = data[2]['image'].permute(1, 2, 0).numpy()
+        # ii, ext = data[2]["image_id"].split('.')
+        # Image.fromarray(augimage).save(f'aug_test/{ii}_{self.iter}_img.{ext}')
+        # for i in range(len(data[2]['instances'])):
+        #     augimage = visualize_bbox(augimage, list(data[2]['instances'].gt_boxes[i].tensor.numpy()[0]))
+        # Image.fromarray(augimage).save(f'aug_test/{ii}_{self.iter}_augimg.{ext}')
 
         loss_dict = self.model(data)
         if isinstance(loss_dict, torch.Tensor):
