@@ -4,6 +4,7 @@ import numpy as np
 from typing import Dict, List, Optional, Tuple
 import torch
 from torch import nn
+from torchvision.utils import make_grid
 
 from detectron2.config import configurable
 from detectron2.data.detection_utils import convert_image_to_rgb
@@ -105,7 +106,9 @@ class GeneralizedRCNN(nn.Module):
         storage = get_event_storage()
         max_vis_prop = 20
 
+        idx = 0
         for input, prop in zip(batched_inputs, proposals):
+            idx += 1
             img = input["image"]
             img = convert_image_to_rgb(img.permute(1, 2, 0), self.input_format)
             v_gt = Visualizer(img, None)
@@ -117,11 +120,55 @@ class GeneralizedRCNN(nn.Module):
                 boxes=prop.proposal_boxes[0:box_size].tensor.cpu().numpy()
             )
             prop_img = v_pred.get_image()
-            vis_img = np.concatenate((anno_img, prop_img), axis=1)
-            vis_img = vis_img.transpose(2, 0, 1)
-            vis_name = "Left: GT bounding boxes;  Right: Predicted proposals"
-            storage.put_image(vis_name, vis_img)
-            break  # only visualize one image in a batch
+
+            # FC CUSTOM LOGIC
+            #dataset_dict['simple_copy_paste'] = {
+            #    'cropped_original_image': dst_img_cropped,
+            #    'original_paste_image': paste_image,
+            #    'cropped_paste_image': src_img_cropped,
+            #    'augmented': dst_img_draw
+            #}
+
+            if 'simple_copy_paste' in input:
+                scp = input['simple_copy_paste']
+
+                from PIL import Image
+                import torchvision.transforms.functional as F
+                vis_img = np.concatenate((np.asarray(Image.open(input['file_name'])), np.asarray(Image.open(scp['original_paste_image']))), axis=0)
+                vis_img = vis_img.transpose(2, 0, 1)
+                vis_name = f"**{str(idx)} Up: Original Image Down: Paste Image"
+                storage.put_image(vis_name, vis_img)
+
+                def get_concat_h(im1, im2):
+                    dst = Image.new('RGB', (im1.width + im2.width, im1.height))
+                    dst.paste(im1, (0, 0))
+                    dst.paste(im2, (im1.width, 0))
+                    return dst
+                vis_img = get_concat_h(scp['cropped_original_image'], scp['cropped_paste_image'])
+                vis_img = get_concat_h(vis_img, scp['augmented'])
+                # t = make_grid([
+                #     torch.tensor(np.asarray(scp['cropped_original_image'])),
+                #     torch.tensor(np.asarray(scp['cropped_paste_image'])),
+                #     torch.tensor(np.asarray(scp['augmented']))])
+                # vis_img = np.concatenate((np.concatenate((np.asarray(scp['cropped_paste_image']),
+                #                                          np.asarray(scp['augmented'])), axis=1),
+                #                          np.concatenate((prop_img, anno_img), axis=1)), axis=0)
+                vis_img = np.asarray(vis_img).transpose(2, 0, 1)
+                vis_name = f"**{str(idx)} Background; Foreground; Augmented"
+                storage.put_image(vis_name, vis_img)
+
+                vis_img = np.concatenate((prop_img, anno_img), axis=1)
+                vis_img = vis_img.transpose(2, 0, 1)
+                vis_name = f"**{str(idx)} Left: Predicted proposals; Right: GT bounding boxes"
+                storage.put_image(vis_name, vis_img)
+            ###################################################################
+            else:
+                vis_img = np.concatenate((prop_img, anno_img), axis=1)
+                vis_img = vis_img.transpose(2, 0, 1)
+                vis_name = f"**{str(idx)} Left: Predicted proposals; Right: GT bounding boxes"
+                storage.put_image(vis_name, vis_img)
+
+            #break  # only visualize one image in a batch
 
     def forward(self, batched_inputs: List[Dict[str, torch.Tensor]]):
         """

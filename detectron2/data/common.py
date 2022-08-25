@@ -98,7 +98,7 @@ class MapDataset(data.Dataset):
 
                 paste_data_dict = None
                 paste_data_idx = None
-                if 'CopyPaste' in albumentation_augs or True:
+                if 'CopyPaste' in albumentation_augs:
                     paste_data_idx = random.randint(0, self.__len__() - 1)
                     paste_data_dict = self._dataset[paste_data_idx]
 
