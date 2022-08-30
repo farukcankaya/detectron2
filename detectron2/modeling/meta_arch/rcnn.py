@@ -144,8 +144,9 @@ class GeneralizedRCNN(nn.Module):
                     dst.paste(im1, (0, 0))
                     dst.paste(im2, (im1.width, 0))
                     return dst
-                vis_img = get_concat_h(scp['cropped_original_image'], scp['cropped_paste_image'])
-                vis_img = get_concat_h(vis_img, scp['augmented'])
+                left = get_concat_h(scp['cropped_original_image'], scp['cropped_paste_image'])
+                right = get_concat_h(scp['augmented'], Image.fromarray(img))
+                vis_img = get_concat_h(left, right)
                 # t = make_grid([
                 #     torch.tensor(np.asarray(scp['cropped_original_image'])),
                 #     torch.tensor(np.asarray(scp['cropped_paste_image'])),
