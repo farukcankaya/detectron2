@@ -104,7 +104,8 @@ class Kitti360InstanceEvaluator(Kitti360Evaluator):
         # set some global states in kitti360 evaluation API, before evaluating
         kitti360_eval.args.kitti360Path = os.environ[
             'KITTI360_DATASET'] if 'KITTI360_DATASET' in os.environ else self._metadata.root
-        kitti360_eval.args.groundTruthListFile = os.path.join(self._metadata.root, self._metadata.gt_file)
+        if not isinstance(self._metadata.gt_file, list):
+            kitti360_eval.args.groundTruthListFile = os.path.join(self._metadata.root, self._metadata.gt_file)
         kitti360_eval.args.predictionPath = os.path.abspath(self._temp_dir)
         kitti360_eval.args.predictionWalk = None
         kitti360_eval.args.JSONOutput = False
@@ -112,10 +113,13 @@ class Kitti360InstanceEvaluator(Kitti360Evaluator):
         kitti360_eval.args.quiet = False
         kitti360_eval.args.gtInstancesFile = os.path.join(self._temp_dir, "gtInstances.json")
 
-        # These lines are adopted from
-        # https://github.com/autonomousvision/kitti360Scripts/blob/master/kitti360scripts/evaluation/semantic_2d/evalInstanceLevelSemanticLabeling.py # noqa
-        with PathManager.open(kitti360_eval.args.groundTruthListFile, "r") as f:
-            pairs = f.read().splitlines()
+        if isinstance(self._metadata.gt_file, list):
+            pairs = self._metadata.gt_file
+        else:
+            # These lines are adopted from
+            # https://github.com/autonomousvision/kitti360Scripts/blob/master/kitti360scripts/evaluation/semantic_2d/evalInstanceLevelSemanticLabeling.py # noqa
+            with PathManager.open(kitti360_eval.args.groundTruthListFile, "r") as f:
+                pairs = f.read().splitlines()
 
         groundTruthImgList = []
         for i, pair in enumerate(pairs):

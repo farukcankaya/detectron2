@@ -22,8 +22,11 @@ logger = logging.getLogger(__name__)
 
 def _get_kitti360_files(kitti_root, image_gt_list_file):
     files = []
-    image_dir = os.path.join(kitti_root, image_gt_list_file)
-    img_gt_list = open(image_dir, "r").read().splitlines()
+    if isinstance(image_gt_list_file, list):
+        img_gt_list = image_gt_list_file
+    else:
+        image_dir = os.path.join(kitti_root, image_gt_list_file)
+        img_gt_list = open(image_dir, "r").read().splitlines()
     # Example image_file: data_2d_raw/2013_05_28_drive_0010_sync/image_00/data_rect/0000002863.png
     # Example gt_file: data_2d_semantics/train/2013_05_28_drive_0010_sync/image_00/semantic/0000002863.png
     for img_gt in img_gt_list:
@@ -37,7 +40,7 @@ def _get_kitti360_files(kitti_root, image_gt_list_file):
             confidence_file = None
         files.append(tuple(os.path.join(kitti_root, f) for f in (image_file, instance_file, confidence_file)))
 
-    assert len(files), "No images found in {}".format(image_dir)
+    assert len(files), "No images found in {}".format('image_gt_list_file' if isinstance(image_gt_list_file, list) else image_dir)
 
     for f in files[0]:
         if f is not None:
@@ -57,7 +60,8 @@ def load_kitti360_instances(root, image_gt_list_file, to_polygons=True):
         functools.partial(_kitti360_files_to_dict, to_polygons=to_polygons),
         files,
     )
-    logger.info("Loaded {} images from {}".format(len(ret), os.path.join(root, image_gt_list_file)))
+    logger.info("Loaded {} images from {}".format(len(ret), 'image_gt_list_file'
+    if isinstance(image_gt_list_file, list) else os.path.join(root, image_gt_list_file)))
 
     # Map kitti360 ids to contiguous ids
     from kitti360scripts.helpers.labels import labels
