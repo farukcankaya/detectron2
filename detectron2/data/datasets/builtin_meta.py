@@ -231,6 +231,56 @@ ADE20K_SEM_SEG_CATEGORIES = [
 # After processed by `prepare_ade20k_sem_seg.py`, id 255 means ignore
 # fmt: on
 
+# fmt: off
+KITTI360_CATEGORIES = [
+    {"name":'unlabeled'            , "id":  0 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0,  0)},
+    {"name":'ego vehicle'          , "id":  1 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0,  0)},
+    {"name":'rectification border' , "id":  2 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0,  0)},
+    {"name":'out of roi'           , "id":  3 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0,  0)},
+    {"name":'static'               , "id":  4 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0,  0)},
+    {"name":'dynamic'              , "id":  5 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (111, 74,  0)},
+    {"name":'ground'               , "id":  6 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": ( 81,  0, 81)},
+    {"name":'road'                 , "id":  7 ,       "kittiId":  1 ,       "trainId":   0 , "category": 'flat'            , "catId": 1       , "hasInstances": False        , "ignoreInEval": False        , "ignoreInInst": False        , "color": (128, 64,128)},
+    {"name":'sidewalk'             , "id":  8 ,       "kittiId":  3 ,       "trainId":   1 , "category": 'flat'            , "catId": 1       , "hasInstances": False        , "ignoreInEval": False        , "ignoreInInst": False        , "color": (244, 35,232)},
+    {"name":'parking'              , "id":  9 ,       "kittiId":  2 ,       "trainId": 255 , "category": 'flat'            , "catId": 1       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (250,170,160)},
+    {"name":'rail track'           , "id": 10 ,       "kittiId":  10,       "trainId": 255 , "category": 'flat'            , "catId": 1       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (230,150,140)},
+    {"name":'building'             , "id": 11 ,       "kittiId":  11,       "trainId":   2 , "category": 'construction'    , "catId": 2       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": ( 70, 70, 70)},
+    {"name":'wall'                 , "id": 12 ,       "kittiId":  7 ,       "trainId":   3 , "category": 'construction'    , "catId": 2       , "hasInstances": False        , "ignoreInEval": False        , "ignoreInInst": False        , "color": (102,102,156)},
+    {"name":'fence'                , "id": 13 ,       "kittiId":  8 ,       "trainId":   4 , "category": 'construction'    , "catId": 2       , "hasInstances": False        , "ignoreInEval": False        , "ignoreInInst": False        , "color": (190,153,153)},
+    {"name":'guard rail'           , "id": 14 ,       "kittiId":  30,       "trainId": 255 , "category": 'construction'    , "catId": 2       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (180,165,180)},
+    {"name":'bridge'               , "id": 15 ,       "kittiId":  31,       "trainId": 255 , "category": 'construction'    , "catId": 2       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (150,100,100)},
+    {"name":'tunnel'               , "id": 16 ,       "kittiId":  32,       "trainId": 255 , "category": 'construction'    , "catId": 2       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (150,120, 90)},
+    {"name":'pole'                 , "id": 17 ,       "kittiId":  21,       "trainId":   5 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": True         , "color": (153,153,153)},
+    {"name":'polegroup'            , "id": 18 ,       "kittiId": -1 ,       "trainId": 255 , "category": 'object'          , "catId": 3       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (153,153,153)},
+    {"name":'traffic light'        , "id": 19 ,       "kittiId":  23,       "trainId":   6 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": True         , "color": (250,170, 30)},
+    {"name":'traffic sign'         , "id": 20 ,       "kittiId":  24,       "trainId":   7 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": True         , "color": (220,220,  0)},
+    {"name":'vegetation'           , "id": 21 ,       "kittiId":  5 ,       "trainId":   8 , "category": 'nature'          , "catId": 4       , "hasInstances": False        , "ignoreInEval": False        , "ignoreInInst": False        , "color": (107,142, 35)},
+    {"name":'terrain'              , "id": 22 ,       "kittiId":  4 ,       "trainId":   9 , "category": 'nature'          , "catId": 4       , "hasInstances": False        , "ignoreInEval": False        , "ignoreInInst": False        , "color": (152,251,152)},
+    {"name":'sky'                  , "id": 23 ,       "kittiId":  9 ,       "trainId":  10 , "category": 'sky'             , "catId": 5       , "hasInstances": False        , "ignoreInEval": False        , "ignoreInInst": False        , "color": ( 70,130,180)},
+    {"name":'person'               , "id": 24 ,       "kittiId":  19,       "trainId":  11 , "category": 'human'           , "catId": 6       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (220, 20, 60)},
+    {"name":'rider'                , "id": 25 ,       "kittiId":  20,       "trainId":  12 , "category": 'human'           , "catId": 6       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (255,  0,  0)},
+    {"name":'car'                  , "id": 26 ,       "kittiId":  13,       "trainId":  13 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (  0,  0,142)},
+    {"name":'truck'                , "id": 27 ,       "kittiId":  14,       "trainId":  14 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (  0,  0, 70)},
+    {"name":'bus'                  , "id": 28 ,       "kittiId":  34,       "trainId":  15 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (  0, 60,100)},
+    {"name":'caravan'              , "id": 29 ,       "kittiId":  16,       "trainId": 255 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0, 90)},
+    {"name":'trailer'              , "id": 30 ,       "kittiId":  15,       "trainId": 255 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0,110)},
+    {"name":'train'                , "id": 31 ,       "kittiId":  33,       "trainId":  16 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (  0, 80,100)},
+    {"name":'motorcycle'           , "id": 32 ,       "kittiId":  17,       "trainId":  17 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (  0,  0,230)},
+    {"name":'bicycle'              , "id": 33 ,       "kittiId":  18,       "trainId":  18 , "category": 'vehicle'         , "catId": 7       , "hasInstances": True         , "ignoreInEval": False        , "ignoreInInst": False        , "color": (119, 11, 32)},
+    {"name":'garage'               , "id": 34 ,       "kittiId":  12,       "trainId":   2 , "category": 'construction'    , "catId": 2       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": ( 64,128,128)},
+    {"name":'gate'                 , "id": 35 ,       "kittiId":  6 ,       "trainId":   4 , "category": 'construction'    , "catId": 2       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (190,153,153)},
+    {"name":'stop'                 , "id": 36 ,       "kittiId":  29,       "trainId": 255 , "category": 'construction'    , "catId": 2       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (150,120, 90)},
+    {"name":'smallpole'            , "id": 37 ,       "kittiId":  22,       "trainId":   5 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (153,153,153)},
+    {"name":'lamp'                 , "id": 38 ,       "kittiId":  25,       "trainId": 255 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (0,   64, 64)},
+    {"name":'trash bin'            , "id": 39 ,       "kittiId":  26,       "trainId": 255 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (0,  128,192)},
+    {"name":'vending machine'      , "id": 40 ,       "kittiId":  27,       "trainId": 255 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (128, 64,  0)},
+    {"name":'box'                  , "id": 41 ,       "kittiId":  28,       "trainId": 255 , "category": 'object'          , "catId": 3       , "hasInstances": True         , "ignoreInEval": True         , "ignoreInInst": True         , "color": (64,  64,128)},
+    {"name":'unknown construction' , "id": 42 ,       "kittiId":  35,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (102,  0,  0)},
+    {"name":'unknown vehicle'      , "id": 43 ,       "kittiId":  36,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": ( 51,  0, 51)},
+    {"name":'unknown object'       , "id": 44 ,       "kittiId":  37,       "trainId": 255 , "category": 'void'            , "catId": 0       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": ( 32, 32, 32)},
+    {"name":'license plate'        , "id": -1 ,       "kittiId":  -1,       "trainId":  -1 , "category": 'vehicle'         , "catId": 7       , "hasInstances": False        , "ignoreInEval": True         , "ignoreInInst": True         , "color": (  0,  0,142)},
+]
+# fmt: off
 
 def _get_coco_instances_meta():
     thing_ids = [k["id"] for k in COCO_CATEGORIES if k["isthing"] == 1]
@@ -349,16 +399,34 @@ def _get_builtin_metadata(dataset_name):
         }
     elif dataset_name == "kitti360":
         # fmt: off
-        KITTI360_THING_CLASSES = [
-            'building', 'person', 'rider', 'car', 'truck', 'motorcycle', 'bicycle',
-        ]
+        # https://arxiv.org/pdf/2109.13410.pdf
+        # “Train” and “Bus” are omitted during evaluation since these two classes are rarely observed
+        # in the test region when we split the training and test sets.
+        OMITTED_CLASSES = ['train', 'bus']
+        def is_thing(k):
+            return k["hasInstances"] and not k["ignoreInInst"] and k["name"] not in OMITTED_CLASSES
+        def is_stuff(k):
+            return k["trainId"] != 255
+
+        KITTI360_THING_CLASSES = [k["name"] for k in KITTI360_CATEGORIES if is_thing(k)]
+        KITTI360_THING_COLORS = [k["color"] for k in KITTI360_CATEGORIES if is_thing(k)]
+        #KITTI360_THING_CLASSES = ['building', 'person', 'rider', 'car', 'truck', 'motorcycle', 'bicycle',]
+
+        KITTI360_STUFF_CLASSES = [k["name"] for k in KITTI360_CATEGORIES if is_stuff(k)]
+        KITTI360_STUFF_COLORS = [k["color"] for k in KITTI360_CATEGORIES if is_stuff(k)]
+        """
+        # KITTI has 'garage', 'gate', 'smallpole', 'license plate' classes in addition to CityScapes stuff classes
         KITTI360_STUFF_CLASSES = [
             'road', 'sidewalk', 'building', 'wall', 'fence', 'pole', 'traffic light',
             'traffic sign', 'vegetation', 'terrain', 'sky', 'person', 'rider', 'car',
             'truck', 'bus', 'train', 'motorcycle', 'bicycle']
+        """
+
         # fmt: on
         return {
             "thing_classes": KITTI360_THING_CLASSES,
+            "thing_colors": KITTI360_THING_COLORS,
             "stuff_classes": KITTI360_STUFF_CLASSES,
+            "stuff_colors": KITTI360_STUFF_COLORS,
         }
     raise KeyError("No built-in metadata for dataset {}".format(dataset_name))
