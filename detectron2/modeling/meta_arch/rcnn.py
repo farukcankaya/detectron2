@@ -169,7 +169,9 @@ class GeneralizedRCNN(nn.Module):
                 vis_name = f"**{str(idx)} Left: Predicted proposals; Right: GT bounding boxes"
                 storage.put_image(vis_name, vis_img)
 
-            #break  # only visualize one image in a batch
+            # Visualize only the first 3 samples
+            if idx == 3:
+                break  # only visualize one image in a batch
 
     def forward(self, batched_inputs: List[Dict[str, torch.Tensor]]):
         """
