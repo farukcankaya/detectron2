@@ -21,6 +21,8 @@ from .build import META_ARCH_REGISTRY
 
 __all__ = ["GeneralizedRCNN", "ProposalNetwork"]
 
+from ...data import MetadataCatalog
+
 
 @META_ARCH_REGISTRY.register()
 class GeneralizedRCNN(nn.Module):
@@ -106,13 +108,28 @@ class GeneralizedRCNN(nn.Module):
         storage = get_event_storage()
         max_vis_prop = 20
 
+        # TODO: take this name from dataset_mapper like 'simple_copy_paste
+        meta = MetadataCatalog.get('kitti360_instance_seg_train_small')
+
         idx = 0
         for input, prop in zip(batched_inputs, proposals):
             idx += 1
+            class_colors_mathplotlib_in_format = [tuple([i / 255 for i in c]) for c in meta.thing_colors]
+            assigned_colors = []
+            labels = []
+            for i in input["instances"].gt_classes:
+                assigned_colors.append(class_colors_mathplotlib_in_format[i])
+                labels.append(meta.thing_classes[i])
+
+
             img = input["image"]
             img = convert_image_to_rgb(img.permute(1, 2, 0), self.input_format)
-            v_gt = Visualizer(img, None)
-            v_gt = v_gt.overlay_instances(boxes=input["instances"].gt_boxes)
+            v_gt = Visualizer(img, meta)
+            v_gt = v_gt.overlay_instances(masks=input["instances"].gt_masks,
+                                          assigned_colors=assigned_colors,
+                                          labels=labels,
+                                          alpha=0.4)
+            v_gt = Visualizer(v_gt.get_image(), meta).overlay_instances(boxes=input["instances"].gt_boxes)
             anno_img = v_gt.get_image()
             box_size = min(len(prop.proposal_boxes), max_vis_prop)
             v_pred = Visualizer(img, None)
